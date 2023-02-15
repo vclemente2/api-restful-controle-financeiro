@@ -757,7 +757,7 @@ Na funcionalidade de listagem de transações do usuário logado (**GET /transac
 
 ---
 
-Link do deploy da API somente para testes: [ link](https://desafio-backend-03-dindin.herokuapp.com/)
+Link do deploy da API somente para testes: [ link](https://desafio-backend-03-dindin.pedagogico.cubos.academy/)
 
 **Este link é somente para testes (ou seja, será possível realizar requisições a esta API através deste link)**
 
