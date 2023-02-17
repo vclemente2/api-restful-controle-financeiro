@@ -1,0 +1,25 @@
+{
+  "name": "desafio-backend-03-dindin-dbeifood",
+  "version": "1.0.0",
+  "description": "![](https://i.imgur.com/xG74tOh.png)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WilliamDiangellis/desafio-backend-03-dindin-dbeifood.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WilliamDiangellis/desafio-backend-03-dindin-dbeifood/issues"
+  },
+  "homepage": "https://github.com/WilliamDiangellis/desafio-backend-03-dindin-dbeifood#readme",
+  "devDependencies": {
+    "eslint": "^8.34.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5"
+  }
+}
