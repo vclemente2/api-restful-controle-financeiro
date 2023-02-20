@@ -3,10 +3,11 @@ const { Router } = require('express');
 const { cadastrarUsuario, logarUsuario, detalharUsuario, atualizarUsuario } = require('../controladores/usuarios');
 const { listarCategoria } = require('../controladores/categoria');
 const { listarTransacao, detalharTransacao, cadastrarTransacao, atualizarTransacao, excluirTransacao, obterExtrato } = require('../controladores/transacao');
+const { verificarNomeEmailSenha, verificarEmailExistente } = require('../intermediarios/usuarios');
 
 const rotas = Router();
 
-rotas.post('/usuario', cadastrarUsuario);
+rotas.post('/usuario', verificarNomeEmailSenha , verificarEmailExistente, cadastrarUsuario,);
 
 rotas.post('/login', logarUsuario);
 
