@@ -1,43 +1,98 @@
-const { buscarUsuarioPeloEmail } = require("../utils/utilsUsuarios")
+const bcrypt = require('bcrypt')
 
-const verificarNomeEmailSenha = (req, res, next) => {
-    const { nome, email, senha } = req.body
-    
+const { buscarUsuarioPeloEmail } = require('../utils/utilsUsuarios')
+
+const verificarNome = (req, res, next) => {
+    const { nome } = req.body
+
     try {
         if (!nome || !nome.trim()) {
-            return res.status(400).json({mensagem: 'O campo nome é obrigatório'})
+            return res.status(400).json({ mensagem: 'O campo nome é obrigatório' })
         }
 
-        if (!email || !email.trim()) {
-            return res.status(400).json({mensagem: 'O campo email é obrigatório'})
-        }
-
-        if (!senha || !senha.trim()) {
-            return res.status(400).json({mensagem: 'O campo senha é obrigatório'})
-        }
         next()
-
     } catch (error) {
-        return res.status(500).json({mensagem: error.message})
+        return res.status(500).json({ mensagem: error.message })
     }
 }
 
-const verificarEmailExistente = async (req, res, next) => {
-    const { email } = req.body
+const verificarEmail = (req, res, next) => {
+    const { email } = req.body;
 
     try {
-        const usuarioEncontrado = await buscarUsuarioPeloEmail(email.trim())
-
-        if (usuarioEncontrado.rowCount !== 0) {
-            return res.status(400).json({mensagem: "Já existe usuário cadastrado com o e-mail informado."})
+        if (!email || !email.trim()) {
+            return res.status(400).json({ mensagem: 'O campo email é obrigatório' })
         }
+
         next()
     } catch (error) {
-        return res.status(500).json({mensagem: error.message})
+        return res.status(500).json({ mensagem: error.message })
+    }
+
+}
+
+const verificarSenha = (req, res, next) => {
+    const { senha } = req.body;
+
+    try {
+        if (!senha || !senha.trim()) {
+            return res.status(400).json({ mensagem: 'O campo senha é obrigatório' })
+        }
+
+        next()
+    } catch (error) {
+        return res.status(500).json({ mensagem: error.message })
     }
 }
 
+// VERIFICAR COM OS MONITORES SE SEGUIR DESSA FORMA É UMA BOA PRÁTICA
+const verificarEmailExistente = async (req, res, next) => {
+    const { url, body } = req;
+    const { email } = body;
+
+    try {
+        const usuarioEncontrado = await buscarUsuarioPeloEmail(email)
+
+        if (url === '/usuario' && usuarioEncontrado.rowCount !== 0) {
+            return res.status(400).json({ mensagem: 'Já existe usuário cadastrado com o e-mail informado.' })
+        }
+        else if (url === '/login' && usuarioEncontrado.rowCount === 0) {
+            return res.status(401).json({ mensagem: 'Usuário e/ou senha inválido(s).' })
+        }
+
+        next()
+    } catch (error) {
+        return res.status(500).json({ mensagem: error.message })
+    }
+}
+
+const verificarSenhaValida = async (req, res, next) => {
+    const { email, senha } = req.body
+
+    try {
+        const usuario = await buscarUsuarioPeloEmail(email)
+        const senhaCriptografada = usuario.rows[0].senha
+
+        const senhaValida = await bcrypt.compare(senha, senhaCriptografada)
+
+        if (!senhaValida) {
+            return res.status(401).json({ mensagem: 'Usuário e/ou senha inválido(s).' })
+        }
+
+        const { senha: _, ...usuarioAutenticado } = usuario.rows[0]
+        req.usuario = usuarioAutenticado
+
+        next()
+    } catch (error) {
+        return res.status(500).json({ mensagem: error.message })
+    }
+}
+
+
 module.exports = {
-    verificarNomeEmailSenha,
-    verificarEmailExistente
+    verificarNome,
+    verificarEmail,
+    verificarSenha,
+    verificarEmailExistente,
+    verificarSenhaValida,
 }
