@@ -1,9 +1,10 @@
 const { Router } = require('express')
 
 const { cadastrarUsuario, logarUsuario, detalharUsuario, atualizarUsuario } = require('../controladores/usuarios')
-const { listarCategoria } = require('../controladores/categoria');
+const { listarCategoria } = require('../controladores/categoria')
 const { listarTransacao, detalharTransacao, cadastrarTransacao, atualizarTransacao, excluirTransacao, obterExtrato } = require('../controladores/transacao')
-const { verificarEmailExistente, verificarEmail, verificarNome, verificarSenha, verificarSenhaValida, gerarToken } = require('../intermediarios/usuarios')
+const { verificarEmailExistente, verificarEmail, verificarNome, verificarSenha, verificarSenhaValida } = require('../intermediarios/usuarios')
+const validarToken = require('../intermediarios/autenticacao')
 
 const rotas = Router()
 
@@ -25,7 +26,7 @@ rotas.post(
     logarUsuario
 )
 
-rotas.use(() => { }) //Passar o intermediário de autenticação como intermediário
+rotas.use(validarToken)
 
 rotas.get('/usuario', detalharUsuario)
 

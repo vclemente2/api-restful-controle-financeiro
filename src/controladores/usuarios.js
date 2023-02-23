@@ -29,8 +29,8 @@ const logarUsuario = (req, res) => {
     const usuario = req.usuario
 
     try {
-        const token = jwt.sign({ id: usuario.id }, senhaToken, { expiresIn: (1000 * 60 * 5) })
-
+        const token = jwt.sign({ id: usuario.id }, senhaToken, { expiresIn: '8h' })
+        
         return res.status(201).json({ usuario, token });
     } catch (error) {
         return res.status(500).json({ mensagem: error.message })

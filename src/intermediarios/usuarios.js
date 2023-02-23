@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 
-const { buscarUsuarioPeloEmail } = require('../utils/utilsUsuarios')
+const { buscarUsuarioPorEmailOuId } = require('../utils/utilsUsuarios')
 
 const verificarNome = (req, res, next) => {
     const { nome } = req.body
@@ -49,10 +49,10 @@ const verificarSenha = (req, res, next) => {
 const verificarEmailExistente = async (req, res, next) => {
     const { url, body } = req;
     const { email } = body;
-
+    
     try {
-        const usuarioEncontrado = await buscarUsuarioPeloEmail(email)
-
+        const usuarioEncontrado = await buscarUsuarioPorEmailOuId(email)
+        
         if (url === '/usuario' && usuarioEncontrado.rowCount !== 0) {
             return res.status(400).json({ mensagem: 'Já existe usuário cadastrado com o e-mail informado.' })
         }
@@ -70,7 +70,7 @@ const verificarSenhaValida = async (req, res, next) => {
     const { email, senha } = req.body
 
     try {
-        const usuario = await buscarUsuarioPeloEmail(email)
+        const usuario = await buscarUsuarioPorEmailOuId(email)
         const senhaCriptografada = usuario.rows[0].senha
 
         const senhaValida = await bcrypt.compare(senha, senhaCriptografada)
