@@ -39,7 +39,13 @@ const logarUsuario = (req, res) => {
 }
 
 const detalharUsuario = (req, res) => {
+    const { usuario } = req
 
+	try {	
+		return res.json(usuario)
+	} catch (error) {
+		return res.status(500).json({mensagem: error.message})
+	}
 }
 
 const atualizarUsuario = async (req, res) => {
