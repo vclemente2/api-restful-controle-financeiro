@@ -20,6 +20,7 @@ const validarToken = async (req, res, next) => {
         }
 
         const { senha: _, ...usuario } = usuarioAutenticado.rows[0]
+        
         req.usuario = usuario
 
         next()

@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const senhaToken = require('../senha-token')
 
 const pool = require('../conexao/conexao')
+const { buscarUsuarioPorEmailOuId } = require('../utils/utilsUsuarios')
 
 const cadastrarUsuario = async (req, res) => {
     const { nome, email, senha } = req.body
@@ -38,7 +39,13 @@ const logarUsuario = (req, res) => {
 }
 
 const detalharUsuario = (req, res) => {
+    const { usuario } = req
 
+	try {	
+		return res.json(usuario)
+	} catch (error) {
+		return res.status(500).json({mensagem: error.message})
+	}
 }
 
 const atualizarUsuario = (req, res) => {
