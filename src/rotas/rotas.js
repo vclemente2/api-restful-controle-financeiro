@@ -6,7 +6,7 @@ const { listarTransacao, detalharTransacao, cadastrarTransacao, atualizarTransac
 const { verificarEmailExistente, verificarEmail, verificarNome, verificarSenha, verificarSenhaValida } = require('../intermediarios/usuarios')
 const validarToken = require('../intermediarios/autenticacao')
 
-const rotas = Router()
+const rotas = Router();
 
 rotas.post(
     '/usuario',
@@ -30,7 +30,14 @@ rotas.use(validarToken)
 
 rotas.get('/usuario', detalharUsuario)
 
-rotas.put('/usuario', atualizarUsuario)
+rotas.put(
+    '/usuario',
+    verificarNome,
+    verificarEmail,
+    verificarSenha,
+    verificarEmailExistente,
+    atualizarUsuario
+)
 
 rotas.get('/categoria', listarCategoria)
 

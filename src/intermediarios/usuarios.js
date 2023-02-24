@@ -45,15 +45,14 @@ const verificarSenha = (req, res, next) => {
     }
 }
 
-// VERIFICAR COM OS MONITORES SE SEGUIR DESSA FORMA É UMA BOA PRÁTICA
 const verificarEmailExistente = async (req, res, next) => {
-    const { url, body } = req;
+    const { url, method, body, usuario } = req;
     const { email } = body;
-    
+
     try {
         const usuarioEncontrado = await buscarUsuarioPorEmailOuId(email)
-        
-        if (url === '/usuario' && usuarioEncontrado.rowCount !== 0) {
+
+        if (url === '/usuario' && usuarioEncontrado.rowCount !== 0 && (method === 'POST' || email !== usuario.email)) {
             return res.status(400).json({ mensagem: 'Já existe usuário cadastrado com o e-mail informado.' })
         }
         else if (url === '/login' && usuarioEncontrado.rowCount === 0) {
@@ -87,7 +86,6 @@ const verificarSenhaValida = async (req, res, next) => {
         return res.status(500).json({ mensagem: error.message })
     }
 }
-
 
 module.exports = {
     verificarNome,
