@@ -1,9 +1,7 @@
 const jwt = require('jsonwebtoken')
-
 const senhaToken = require('../senha-token')
 const pool = require('../conexao/conexao')
 const { criptografarSenha } = require('../utils/utilsUsuarios')
-
 
 const cadastrarUsuario = async (req, res) => {
     const { nome, email, senha } = req.body
@@ -42,7 +40,7 @@ const detalharUsuario = (req, res) => {
     const { usuario } = req
 
 	try {	
-		return res.json(usuario)
+		return res.status(200).json(usuario)
 	} catch (error) {
 		return res.status(500).json({mensagem: error.message})
 	}
