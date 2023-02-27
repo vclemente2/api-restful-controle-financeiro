@@ -25,7 +25,7 @@ CREATE TABLE
 CREATE TABLE
     transacoes (
         id SERIAL PRIMARY KEY,
-        descricao TEXT,
+        descricao TEXT NOT NULL,
         valor INTEGER NOT NULL,
         data DATE NOT NULL,
         categoria_id INTEGER REFERENCES categorias(id) NOT NULL,
