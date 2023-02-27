@@ -5,6 +5,7 @@ const { listarCategoria } = require('../controladores/categoria')
 const { listarTransacao, detalharTransacao, cadastrarTransacao, atualizarTransacao, excluirTransacao, obterExtrato } = require('../controladores/transacao')
 const { verificarEmailExistente, verificarEmail, verificarNome, verificarSenha, verificarSenhaValida } = require('../intermediarios/usuarios')
 const validarToken = require('../intermediarios/autenticacao')
+const { verificarCamposObrigatorios, verificarFormatoData, verificarCategoriaExistente, validarTipoTransacao } = require('../intermediarios/transacoes')
 
 const rotas = Router();
 
@@ -45,7 +46,14 @@ rotas.get('/transacao', listarTransacao)
 
 rotas.get('/transacao/:id', detalharTransacao)
 
-rotas.post('/transacao', cadastrarTransacao)
+rotas.post(
+    '/transacao',
+    verificarCamposObrigatorios,
+    validarTipoTransacao,
+    verificarFormatoData,
+    verificarCategoriaExistente,
+    cadastrarTransacao
+)
 
 rotas.put('/transacao/:id', atualizarTransacao)
 

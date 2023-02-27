@@ -22,17 +22,16 @@ const validarToken = async (req, res, next) => {
         }
 
         const { senha: _, ...usuario } = usuarioAutenticado.rows[0]
-        
+
         req.usuario = usuario
 
         next()
     } catch (error) {
-        if (error.name === 'JsonWebTokenError') {
+        if (error.name === 'JsonWebTokenError' || error.name === "TokenExpiredError") {
             return res.status(401).json({ mensagem: 'Para acessar este recurso um token de autenticação válido deve ser enviado.' })
         }
         return res.status(500).json({ mensagem: error.message })
     }
-
 }
 
 module.exports = validarToken
