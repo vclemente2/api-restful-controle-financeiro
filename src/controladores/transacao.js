@@ -21,7 +21,7 @@ const cadastrarTransacao = async (req, res) => {
         ($1, $2, $3, $4, $5, $6)
         returning id, tipo, descricao, valor, data, usuario_id, categoria_id
         `
-        const { rows } = await pool.query(query, [descricao.trim(), valor, new Date(data), categoria_id, tipo.trim(), id])
+        const { rows } = await pool.query(query, [descricao.trim(), valor, new Date(data), categoria_id, tipo, id])
         const transacaoCadastrada = rows[0]
 
         return res.status(201).json({ ...transacaoCadastrada, categoria_nome })
