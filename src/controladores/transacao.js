@@ -17,7 +17,13 @@ const listarTransacao = async (req, res) => {
 }
 
 const detalharTransacao = (req, res) => {
-    
+    const { transacao } = req
+
+    try {
+        return res.status(200).json(transacao)
+    } catch (error) {
+        return res.status(500).json({mensagem: error.message})
+    } 
 }
 
 const cadastrarTransacao = async (req, res) => {

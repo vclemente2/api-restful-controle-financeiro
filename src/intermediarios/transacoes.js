@@ -73,9 +73,40 @@ const validarTipoTransacao = (req, res, next) => {
     }
 }
 
+const verificarTransacaoExistente = async (req, res, next) => {
+    const { id } = req.usuario
+    const { id: id_transacao } = req.params
+
+    try {
+        const query = `
+        SELECT t.id, t.tipo, t.descricao, t.valor, t.data, t.usuario_id, t.categoria_id, c.descricao AS categoria_nome
+        FROM transacoes t 
+        JOIN categorias c ON t.categoria_id = c.id
+        WHERE t.id = $1;
+        `
+        const { rows, rowCount } = await pool.query(query, [id_transacao])
+
+        if (rowCount === 0) {
+            return res.status(404).json({mensagem: 'Não existe transação para o id informado'})
+        }
+
+        const { usuario_id } = rows[0]
+        if (id !== usuario_id) {
+            return res.status(401).json({mensagem: 'Acesso negado!! A transação não pertende ao usuario'})
+        }
+
+        req.transacao = rows[0]
+        
+        next()
+    } catch (error) {
+        return res.status(500).json({mensagem: error.message})
+    }
+}
+
 module.exports = {
     verificarCamposObrigatorios,
     verificarFormatoData,
     verificarCategoriaExistente,
-    validarTipoTransacao
+    validarTipoTransacao,
+    verificarTransacaoExistente
 }
