@@ -7,19 +7,20 @@ const listarTransacao = async (req, res) => {
         SELECT t.*, c.descricao as categoria_nome 
         FROM transacoes t 
         JOIN categorias c ON t.categoria_id = c.id
-        WHERE t.usuario_id = $1;
+        WHERE t.usuario_id = $1
+        ORDER BY t.id;
         `
         const { rows } = await pool.query(query, [id])
         return res.status(200).json(rows)
     } catch (error) {
-        return res.status(500).json({mensagem: error.message})
-    } 
+        return res.status(500).json({ mensagem: error.message })
+    }
 }
 
 const detalharTransacao = (req, res) => {
     const { transacao } = req
 
-    return res.status(200).json(transacao) 
+    return res.status(200).json(transacao)
 }
 
 const cadastrarTransacao = async (req, res) => {
@@ -44,8 +45,26 @@ const cadastrarTransacao = async (req, res) => {
     }
 }
 
-const atualizarTransacao = (req, res) => {
+const atualizarTransacao = async (req, res) => {
+    const { descricao, valor, data, categoria_id, tipo } = req.body
+    const { id } = req.params
 
+    try {
+        const query = `
+        UPDATE transacoes SET
+        descricao = $1,
+        valor = $2,
+        data = $3,
+        categoria_id = $4,
+        tipo = $5
+        WHERE id = $6
+        `
+        await pool.query(query, [descricao.trim(), valor, new Date(data), categoria_id, tipo, id])
+
+        return res.sendStatus(204)
+    } catch (error) {
+        return res.status(500).json({ mensagem: error.message })
+    }
 }
 
 const excluirTransacao = (req, res) => {

@@ -15,7 +15,7 @@ const verificarCamposObrigatorios = (req, res, next) => {
         return res.status(400).json({ mensagem: 'Todos os campos obrigatórios devem ser informados.' })
     }
 
-    next()  
+    next()
 }
 
 const verificarFormatoData = (req, res, next) => {
@@ -28,7 +28,7 @@ const verificarFormatoData = (req, res, next) => {
     }
 
     next()
-    
+
 }
 
 const verificarCategoriaExistente = async (req, res, next) => {
@@ -40,7 +40,7 @@ const verificarCategoriaExistente = async (req, res, next) => {
         const { rows, rowCount } = await pool.query(query, [categoria_id])
 
         if (rowCount === 0) {
-            return res.status(400).json({ mensagem: 'Não existe categoria cadastrada para o ID informado.'})
+            return res.status(400).json({ mensagem: 'Não existe categoria cadastrada para o ID informado.' })
         }
 
         req.categoria_nome = rows[0].descricao
@@ -56,7 +56,7 @@ const validarTipoTransacao = (req, res, next) => {
     const { tipo } = req.body
 
     if (!['entrada', 'saida'].includes(tipo)) {
-        return res.status(400).json({ mensagem: 'Tipo inválido. O tipo deve ser entrada ou saida.'})
+        return res.status(400).json({ mensagem: 'Tipo inválido. O tipo deve ser entrada ou saida.' })
     }
 
     next()
@@ -77,14 +77,14 @@ const verificarTransacaoExistente = async (req, res, next) => {
         const { rows, rowCount } = await pool.query(query, [id_transacao, id])
 
         if (rowCount === 0) {
-            return res.status(404).json({mensagem: 'Não existe transação para o id informado'})
+            return res.status(404).json({ mensagem: 'Não existe transação para o id informado' })
         }
 
         req.transacao = rows[0]
-        
+
         next()
     } catch (error) {
-        return res.status(500).json({mensagem: error.message})
+        return res.status(500).json({ mensagem: error.message })
     }
 }
 

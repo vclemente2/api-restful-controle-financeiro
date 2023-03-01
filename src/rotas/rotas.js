@@ -29,7 +29,10 @@ rotas.post(
 
 rotas.use(validarToken)
 
-rotas.get('/usuario', detalharUsuario)
+rotas.get(
+    '/usuario',
+    detalharUsuario
+)
 
 rotas.put(
     '/usuario',
@@ -40,11 +43,21 @@ rotas.put(
     atualizarUsuario
 )
 
-rotas.get('/categoria', listarCategoria)
+rotas.get(
+    '/categoria',
+    listarCategoria
+)
 
-rotas.get('/transacao', listarTransacao)
+rotas.get(
+    '/transacao',
+    listarTransacao
+)
 
-rotas.get('/transacao/:id', verificarTransacaoExistente, detalharTransacao)
+rotas.get(
+    '/transacao/:id',
+    verificarTransacaoExistente,
+    detalharTransacao
+)
 
 rotas.post(
     '/transacao',
@@ -55,7 +68,14 @@ rotas.post(
     cadastrarTransacao
 )
 
-rotas.put('/transacao/:id', atualizarTransacao)
+rotas.put(
+    '/transacao/:id',
+    verificarCamposObrigatorios,
+    validarTipoTransacao,
+    verificarCategoriaExistente,
+    verificarTransacaoExistente,
+    atualizarTransacao
+)
 
 rotas.delete('/transacao/:id', excluirTransacao)
 
