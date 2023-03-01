@@ -77,7 +77,11 @@ rotas.put(
     atualizarTransacao
 )
 
-rotas.delete('/transacao/:id', excluirTransacao)
+rotas.delete(
+    '/transacao/:id',
+    verificarTransacaoExistente,
+    excluirTransacao
+    )
 
 rotas.get('/transacao/extrato', obterExtrato)
 
