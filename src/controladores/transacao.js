@@ -4,7 +4,7 @@ const listarTransacao = async (req, res) => {
     const { id } = req.usuario
     try {
         const query = `
-        SELECT t.id, t.tipo, t.descricao, t.valor, t.data, t.usuario_id, t.categoria_id, c.descricao as categoria_nome
+        SELECT t.*, c.descricao as categoria_nome 
         FROM transacoes t 
         JOIN categorias c ON t.categoria_id = c.id
         WHERE t.usuario_id = $1;
@@ -19,11 +19,7 @@ const listarTransacao = async (req, res) => {
 const detalharTransacao = (req, res) => {
     const { transacao } = req
 
-    try {
-        return res.status(200).json(transacao)
-    } catch (error) {
-        return res.status(500).json({mensagem: error.message})
-    } 
+    return res.status(200).json(transacao) 
 }
 
 const cadastrarTransacao = async (req, res) => {
@@ -33,11 +29,11 @@ const cadastrarTransacao = async (req, res) => {
 
     try {
         const query = `
-        insert into transacoes
+        INSERT INTO transacoes
         (descricao, valor, data, categoria_id, tipo, usuario_id)
-        values
+        VALUES
         ($1, $2, $3, $4, $5, $6)
-        returning id, tipo, descricao, valor, data, usuario_id, categoria_id
+        RETURNING id, tipo, descricao, valor, data, usuario_id, categoria_id
         `
         const { rows } = await pool.query(query, [descricao.trim(), valor, new Date(data), categoria_id, tipo, id])
         const transacaoCadastrada = rows[0]
@@ -57,7 +53,7 @@ const excluirTransacao = (req, res) => {
 }
 
 const obterExtrato = (req, res) => {
-
+    //utilizar o Reduce
 }
 
 module.exports = {

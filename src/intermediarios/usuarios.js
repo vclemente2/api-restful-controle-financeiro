@@ -5,44 +5,33 @@ const { buscarUsuarioPorEmailOuId } = require('../utils/utilsUsuarios')
 const verificarNome = (req, res, next) => {
     const { nome } = req.body
 
-    try {
-        if (!nome || !nome.trim()) {
-            return res.status(400).json({ mensagem: 'O campo nome é obrigatório' })
-        }
-
-        next()
-    } catch (error) {
-        return res.status(500).json({ mensagem: error.message })
+    if (!nome || !nome.trim()) {
+        return res.status(422).json({ mensagem: 'O campo nome é obrigatório' })
     }
+    
+    req.body.nome = req.body.nome.trim()
+    next()
 }
 
 const verificarEmail = (req, res, next) => {
-    const { email } = req.body;
+    const { email } = req.body
 
-    try {
-        if (!email || !email.trim()) {
-            return res.status(400).json({ mensagem: 'O campo email é obrigatório' })
-        }
-
-        next()
-    } catch (error) {
-        return res.status(500).json({ mensagem: error.message })
+    if (!email || !email.trim()) {
+        return res.status(422).json({ mensagem: 'O campo email é obrigatório' })
     }
 
+    req.body.email = req.body.email.trim()
+    next()
 }
 
 const verificarSenha = (req, res, next) => {
-    const { senha } = req.body;
+    const { senha } = req.body
 
-    try {
-        if (!senha || !senha.trim()) {
-            return res.status(400).json({ mensagem: 'O campo senha é obrigatório' })
-        }
-
-        next()
-    } catch (error) {
-        return res.status(500).json({ mensagem: error.message })
+    if (!senha || !senha.trim()) {
+        return res.status(422).json({ mensagem: 'O campo senha é obrigatório' })
     }
+
+    next()
 }
 
 const verificarEmailExistente = async (req, res, next) => {
@@ -53,10 +42,10 @@ const verificarEmailExistente = async (req, res, next) => {
         const usuarioEncontrado = await buscarUsuarioPorEmailOuId(email)
 
         if (url === '/usuario' && usuarioEncontrado.rowCount !== 0 && (method === 'POST' || email !== usuario.email)) {
-            return res.status(400).json({ mensagem: 'Já existe usuário cadastrado com o e-mail informado.' })
+            return res.status(409).json({ mensagem: 'Já existe usuário cadastrado com o e-mail informado.' })
         }
         else if (url === '/login' && usuarioEncontrado.rowCount === 0) {
-            return res.status(401).json({ mensagem: 'Usuário e/ou senha inválido(s).' })
+            return res.status(403).json({ mensagem: 'Usuário e/ou senha inválido(s).' })
         }
 
         next()
@@ -75,7 +64,7 @@ const verificarSenhaValida = async (req, res, next) => {
         const senhaValida = await bcrypt.compare(senha, senhaCriptografada)
 
         if (!senhaValida) {
-            return res.status(401).json({ mensagem: 'Usuário e/ou senha inválido(s).' })
+            return res.status(403).json({ mensagem: 'Usuário e/ou senha inválido(s).' })
         }
 
         const { senha: _, ...usuarioAutenticado } = usuario.rows[0]

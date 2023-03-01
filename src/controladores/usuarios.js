@@ -10,13 +10,13 @@ const cadastrarUsuario = async (req, res) => {
         const senhaCriptografada = await criptografarSenha(senha);
 
         const query = `
-        insert into usuarios (nome, email, senha)
-        values
+        INSERT INTO usuarios (nome, email, senha)
+        VALUES
         ($1, $2, $3)
-        returning id, nome, email
+        RETURNING id, nome, email
         `
 
-        const usuarioCadastrado = await pool.query(query, [nome.trim(), email.trim(), senhaCriptografada])
+        const usuarioCadastrado = await pool.query(query, [nome, email, senhaCriptografada])
 
         return res.status(201).json(usuarioCadastrado.rows[0])
     } catch (error) {
@@ -27,23 +27,14 @@ const cadastrarUsuario = async (req, res) => {
 const logarUsuario = (req, res) => {
     const usuario = req.usuario
 
-    try {
-        const token = jwt.sign({ id: usuario.id }, senhaToken, { expiresIn: '8h' })
-
-        return res.status(201).json({ usuario, token });
-    } catch (error) {
-        return res.status(500).json({ mensagem: error.message })
-    }
+    const token = jwt.sign({ id: usuario.id }, senhaToken, { expiresIn: '8h' })
+    return res.status(201).json({ usuario, token })
 }
 
 const detalharUsuario = (req, res) => {
     const { usuario } = req
 
-	try {	
-		return res.status(200).json(usuario)
-	} catch (error) {
-		return res.status(500).json({mensagem: error.message})
-	}
+    return res.status(200).json(usuario)
 }
 
 const atualizarUsuario = async (req, res) => {
@@ -54,14 +45,15 @@ const atualizarUsuario = async (req, res) => {
         const { id } = req.usuario
 
         const query = `
-        update usuarios
-        set
+        UPDATE usuarios
+        SET
         nome = $1,
         email = $2,
         senha = $3
-        where id = $4
+        WHERE id = $4
         `
-        await pool.query(query, [nome.trim(), email.trim(), senhaCriptografada, id])
+           
+        await pool.query(query, [nome, email, senhaCriptografada, id])
 
         return res.sendStatus(204)
     } catch (error) {
