@@ -1,11 +1,11 @@
-const express = require('express');
+const express = require('express')
 
-const rotas = require('./rotas/rotas.js');
+const rotas = require('./rotas/rotas.js')
 
-const app = express();
+const app = express()
 
-app.use(express.json());
+app.use(express.json())
 app.use(rotas);
 
 
-app.listen(3000, () => { console.log('Servidor rodando na porta 3000') });
+app.listen(3000, () => { console.log('Servidor rodando na porta 3000') })

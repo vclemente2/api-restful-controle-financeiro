@@ -9,14 +9,14 @@ const buscarUsuarioPorEmailOuId = async (dadoDeBusca) => {
     if (!Number(dadoDeBusca)) {
         query = `SELECT * FROM usuarios WHERE email = $1`
     }
-    
+
     const usuarioEncontrado = await pool.query(query, [dadoDeBusca])
 
     return usuarioEncontrado
 }
 
 const criptografarSenha = async (senha) => {
-    const senhaCriptografada = await bcrypt.hash(senha, 10);
+    const senhaCriptografada = await bcrypt.hash(senha, 10)
     return senhaCriptografada;
 }
 

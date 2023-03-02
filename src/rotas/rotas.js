@@ -7,7 +7,7 @@ const { verificarEmailExistente, verificarEmail, verificarNome, verificarSenha, 
 const validarToken = require('../intermediarios/autenticacao')
 const { verificarCamposObrigatorios, verificarFormatoData, verificarCategoriaExistente, validarTipoTransacao, verificarTransacaoExistente } = require('../intermediarios/transacoes')
 
-const rotas = Router();
+const rotas = Router()
 
 rotas.post(
     '/usuario',
