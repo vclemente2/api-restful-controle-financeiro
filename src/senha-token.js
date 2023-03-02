@@ -1,0 +1,1 @@
+module.exports = "$2b$10$JKAblDQEJ9W/4CSnPR9vH.yHxZnT.kVs.YcgvTh3hw4tjubbxiPq6"

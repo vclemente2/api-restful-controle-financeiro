@@ -1,35 +1,91 @@
-const { Router } = require('express');
+const { Router } = require('express')
 
-const { cadastrarUsuario, logarUsuario, detalharUsuario, atualizarUsuario } = require('../controladores/usuarios');
-const { listarCategoria } = require('../controladores/categoria');
-const { listarTransacao, detalharTransacao, cadastrarTransacao, atualizarTransacao, excluirTransacao, obterExtrato } = require('../controladores/transacao');
-const { verificarNomeEmailSenha, verificarEmailExistente } = require('../intermediarios/usuarios');
+const { cadastrarUsuario, logarUsuario, detalharUsuario, atualizarUsuario } = require('../controladores/usuarios')
+const { listarCategoria } = require('../controladores/categoria')
+const { listarTransacao, detalharTransacao, cadastrarTransacao, atualizarTransacao, excluirTransacao, obterExtrato } = require('../controladores/transacao')
+const { verificarEmailExistente, verificarEmail, verificarNome, verificarSenha, verificarSenhaValida } = require('../intermediarios/usuarios')
+const validarToken = require('../intermediarios/autenticacao')
+const { verificarCamposObrigatorios, verificarFormatoData, verificarCategoriaExistente, validarTipoTransacao, verificarTransacaoExistente } = require('../intermediarios/transacoes')
 
-const rotas = Router();
+const rotas = Router()
 
-rotas.post('/usuario', verificarNomeEmailSenha , verificarEmailExistente, cadastrarUsuario,);
+rotas.post(
+    '/usuario',
+    verificarNome,
+    verificarEmail,
+    verificarSenha,
+    verificarEmailExistente,
+    cadastrarUsuario
+)
 
-rotas.post('/login', logarUsuario);
+rotas.post(
+    '/login',
+    verificarEmail,
+    verificarSenha,
+    verificarEmailExistente,
+    verificarSenhaValida,
+    logarUsuario
+)
 
-rotas.use(() => { }); //Passar o intermediário de autenticação como intermediário
+rotas.use(validarToken)
 
-rotas.get('/usuario', detalharUsuario);
+rotas.get(
+    '/usuario',
+    detalharUsuario
+)
 
-rotas.put('/usuario', atualizarUsuario);
+rotas.put(
+    '/usuario',
+    verificarNome,
+    verificarEmail,
+    verificarSenha,
+    verificarEmailExistente,
+    atualizarUsuario
+)
 
-rotas.get('/categoria', listarCategoria);
+rotas.get(
+    '/categoria',
+    listarCategoria
+)
 
-rotas.get('/transacao', listarTransacao);
+rotas.get(
+    '/transacao',
+    listarTransacao
+)
 
-rotas.get('/transacao/:id', detalharTransacao);
+rotas.get(
+    '/transacao/extrato',
+    obterExtrato
+)
 
-rotas.post('/transacao', cadastrarTransacao);
+rotas.get(
+    '/transacao/:id',
+    verificarTransacaoExistente,
+    detalharTransacao
+)
 
-rotas.put('/transacao/:id', atualizarTransacao);
+rotas.post(
+    '/transacao',
+    verificarCamposObrigatorios,
+    validarTipoTransacao,
+    verificarFormatoData,
+    verificarCategoriaExistente,
+    cadastrarTransacao
+)
 
-rotas.delete('/transacao/:id', excluirTransacao);
+rotas.put(
+    '/transacao/:id',
+    verificarCamposObrigatorios,
+    validarTipoTransacao,
+    verificarCategoriaExistente,
+    verificarTransacaoExistente,
+    atualizarTransacao
+)
 
-rotas.get('/transacao/extrato', obterExtrato);
+rotas.delete(
+    '/transacao/:id',
+    verificarTransacaoExistente,
+    excluirTransacao
+)
 
-
-module.exports = rotas;
+module.exports = rotas
