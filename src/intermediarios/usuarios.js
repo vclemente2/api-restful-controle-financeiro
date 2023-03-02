@@ -8,7 +8,7 @@ const verificarNome = (req, res, next) => {
     if (!nome || !nome.trim()) {
         return res.status(422).json({ mensagem: 'O campo nome é obrigatório' })
     }
-    
+
     req.body.nome = req.body.nome.trim()
     next()
 }
@@ -35,8 +35,8 @@ const verificarSenha = (req, res, next) => {
 }
 
 const verificarEmailExistente = async (req, res, next) => {
-    const { url, method, body, usuario } = req;
-    const { email } = body;
+    const { url, method, body, usuario } = req
+    const { email } = body
 
     try {
         const usuarioEncontrado = await buscarUsuarioPorEmailOuId(email)

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+
 const senhaToken = require('../senha-token')
 const pool = require('../conexao/conexao')
 const { criptografarSenha } = require('../utils/utilsUsuarios')
@@ -38,10 +39,10 @@ const detalharUsuario = (req, res) => {
 }
 
 const atualizarUsuario = async (req, res) => {
-    const { nome, email, senha } = req.body;
+    const { nome, email, senha } = req.body
 
     try {
-        const senhaCriptografada = await criptografarSenha(senha);
+        const senhaCriptografada = await criptografarSenha(senha)
         const { id } = req.usuario
 
         const query = `
@@ -52,7 +53,7 @@ const atualizarUsuario = async (req, res) => {
         senha = $3
         WHERE id = $4
         `
-           
+
         await pool.query(query, [nome, email, senhaCriptografada, id])
 
         return res.sendStatus(204)

@@ -3,8 +3,21 @@ const { buscarTransacoesPeloIdDoUsuario } = require('../utils/utilsTransacao')
 
 const listarTransacao = async (req, res) => {
     const { id } = req.usuario
+    const { filtro } = req.query
+
     try {
-        const { rows } = await buscarTransacoesPeloIdDoUsuario(id, true)
+        let { rows } = await buscarTransacoesPeloIdDoUsuario(id, true)
+
+        if (filtro) {
+            rows = rows.filter((transacao) => {
+                const { categoria_nome: categoria } = transacao;
+
+                if (filtro.includes(categoria) || filtro.includes(categoria.toLowerCase())) {
+                    return categoria
+                }
+            })
+        }
+
         return res.status(200).json(rows)
     } catch (error) {
         return res.status(500).json({ mensagem: error.message })
@@ -88,12 +101,12 @@ const obterExtrato = async (req, res) => {
         }
 
         rows.forEach((transacao) => {
-            const { tipo, valor } = transacao;
+            const { tipo, valor } = transacao
 
             if (tipo === 'entrada') {
-                return extrato.entrada += valor;
+                return extrato.entrada += valor
             } else {
-                return extrato.saida += valor;
+                return extrato.saida += valor
             }
         })
 

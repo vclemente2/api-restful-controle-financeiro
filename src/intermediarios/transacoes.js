@@ -29,7 +29,6 @@ const verificarFormatoData = (req, res, next) => {
     }
 
     next()
-
 }
 
 const verificarCategoriaExistente = async (req, res, next) => {
