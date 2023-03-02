@@ -68,15 +68,6 @@ const verificarTransacaoExistente = async (req, res, next) => {
     const { id: id_transacao } = req.params
 
     try {
-        // const query = `
-        // SELECT t.*, c.descricao AS categoria_nome
-        // FROM transacoes t 
-        // JOIN categorias c ON t.categoria_id = c.id
-        // WHERE t.id = $1 AND t.usuario_id = $2; 
-        // `
-
-        // const { rows, rowCount } = await pool.query(query, [id_transacao, id])
-
         const { rows, rowCount } = await buscarTransacoesPeloIdDoUsuario(id, true, id_transacao)
 
         if (rowCount === 0) {

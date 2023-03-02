@@ -4,15 +4,6 @@ const { buscarTransacoesPeloIdDoUsuario } = require('../utils/utilsTransacao')
 const listarTransacao = async (req, res) => {
     const { id } = req.usuario
     try {
-        // const query = `
-        // SELECT t.*, c.descricao as categoria_nome 
-        // FROM transacoes t 
-        // JOIN categorias c ON t.categoria_id = c.id
-        // WHERE t.usuario_id = $1
-        // ORDER BY t.id;
-        // `
-        // const { rows } = await pool.query(query, [id])
-
         const { rows } = await buscarTransacoesPeloIdDoUsuario(id, true)
         return res.status(200).json(rows)
     } catch (error) {
