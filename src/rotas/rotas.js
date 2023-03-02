@@ -54,6 +54,11 @@ rotas.get(
 )
 
 rotas.get(
+    '/transacao/extrato',
+    obterExtrato
+)
+
+rotas.get(
     '/transacao/:id',
     verificarTransacaoExistente,
     detalharTransacao
@@ -81,9 +86,6 @@ rotas.delete(
     '/transacao/:id',
     verificarTransacaoExistente,
     excluirTransacao
-    )
-
-rotas.get('/transacao/extrato', obterExtrato)
-
+)
 
 module.exports = rotas
