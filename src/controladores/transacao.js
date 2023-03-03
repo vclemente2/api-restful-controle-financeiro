@@ -6,10 +6,10 @@ const listarTransacao = async (req, res) => {
     const { filtro } = req.query
 
     try {
-        let { rows } = await buscarTransacoesPeloIdDoUsuario(id, true)
+        const listaTransacao = await buscarTransacoesPeloIdDoUsuario(id, true)
 
         if (filtro) {
-            rows = rows.filter((transacao) => {
+            listaTransacao.rows = listaTransacao.rows.filter((transacao) => {
                 const { categoria_nome: categoria } = transacao;
 
                 if (filtro.includes(categoria) || filtro.includes(categoria.toLowerCase())) {
@@ -18,7 +18,7 @@ const listarTransacao = async (req, res) => {
             })
         }
 
-        return res.status(200).json(rows)
+        return res.status(200).json(listaTransacao.rows)
     } catch (error) {
         return res.status(500).json({ mensagem: error.message })
     }
@@ -94,22 +94,18 @@ const obterExtrato = async (req, res) => {
 
     try {
         const { rows } = await buscarTransacoesPeloIdDoUsuario(id)
-
-        const extrato = {
-            entrada: 0,
-            saida: 0
-        }
-
-        rows.forEach((transacao) => {
+        
+        const extrato = rows.reduce((extrato, transacao) => {
             const { tipo, valor } = transacao
 
-            if (tipo === 'entrada') {
-                return extrato.entrada += valor
-            } else {
-                return extrato.saida += valor
-            }
-        })
+            extrato[tipo] += valor
 
+            return extrato
+        }, {
+            entrada: 0,
+            saida: 0
+        })
+        
         return res.status(200).json(extrato)
     } catch (error) {
         return res.status(500).json({ mensagem: error.message })
