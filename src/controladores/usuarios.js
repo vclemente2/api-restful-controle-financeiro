@@ -16,7 +16,7 @@ const cadastrarUsuario = async (req, res) => {
         ($1, $2, $3)
         RETURNING id, nome, email
         `
-
+        
         const usuarioCadastrado = await pool.query(query, [nome, email, senhaCriptografada])
 
         return res.status(201).json(usuarioCadastrado.rows[0])
