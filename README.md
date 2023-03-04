@@ -15,7 +15,7 @@ Este projeto é uma RESTful API que possui as seguintes funcionalidades:
 - Remover transação
 - Obter extrato de transações
 
-**Observação:** Cada usuário só pode consultar e manipular seus próprios dados e transações após **autenticação** através de um **token**.
+**Observação:** Cada usuário só pode consultar e manipular seus próprios dados e transações após **autenticação** via **token**.
 
 ## **Banco de dados**
 
