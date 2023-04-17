@@ -17,7 +17,7 @@ class BaseRepository {
     async update(id, data) {
         return await connection(this.table).where({ id }).update(data).returning('*');
     }
-    async delete(id) {
+    async destroy(id) {
         return await connection(this.table).where({ id }).delete();
     }
 }

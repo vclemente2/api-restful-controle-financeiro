@@ -1,9 +1,28 @@
 const jwt = require('jsonwebtoken')
 
 const senhaToken = require('../senha-token')
-const pool = require('../conexao/conexao')
+
 const { criptografarSenha } = require('../utils/utilsUsuarios')
 
+class UserController {
+
+    async create(req, res) {
+
+    }
+
+    async findOne(req, res) {
+
+    }
+
+    async update(req, res) {
+
+    }
+
+    async destroy(req, res) {
+
+    }
+
+}
 const cadastrarUsuario = async (req, res) => {
     const { nome, email, senha } = req.body
 
@@ -16,7 +35,7 @@ const cadastrarUsuario = async (req, res) => {
         ($1, $2, $3)
         RETURNING id, nome, email
         `
-        
+
         const usuarioCadastrado = await pool.query(query, [nome, email, senhaCriptografada])
 
         return res.status(201).json(usuarioCadastrado.rows[0])
@@ -25,12 +44,7 @@ const cadastrarUsuario = async (req, res) => {
     }
 }
 
-const logarUsuario = (req, res) => {
-    const usuario = req.usuario
 
-    const token = jwt.sign({ id: usuario.id }, senhaToken, { expiresIn: '8h' })
-    return res.status(201).json({ usuario, token })
-}
 
 const detalharUsuario = (req, res) => {
     const { usuario } = req

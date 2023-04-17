@@ -1,16 +1,16 @@
 const { Router } = require('express');
 
-const { cadastrarUsuario, logarUsuario, detalharUsuario, atualizarUsuario } = require('../controllers/usuarios');
+const { cadastrarUsuario, logarUsuario, detalharUsuario, atualizarUsuario } = require('../controllers/UserController');
 const { listarCategoria } = require('../controllers/categoria');
 const { listarTransacao, detalharTransacao, cadastrarTransacao, atualizarTransacao, excluirTransacao, obterExtrato } = require('../controllers/transacao');
-const { verificarEmailExistente, verificarEmail, verificarNome, verificarSenha, verificarSenhaValida } = require('../intermediarios/usuarios');
-const validarToken = require('../intermediarios/autenticacao');
-const { verificarCamposObrigatorios, verificarFormatoData, verificarCategoriaExistente, validarTipoTransacao, verificarTransacaoExistente } = require('../intermediarios/transacoes');
+const { verificarEmailExistente, verificarEmail, verificarNome, verificarSenha, verificarSenhaValida } = require('../middlewares/usuarios');
+const validarToken = require('../middlwares/autenticacao');
+const { verificarCamposObrigatorios, verificarFormatoData, verificarCategoriaExistente, validarTipoTransacao, verificarTransacaoExistente } = require('../middlewares/transacoes');
 
-const rotas = Router()
+const routes = Router()
 
-rotas.post(
-    '/usuario',
+routes.post(
+    '/user',
     verificarNome,
     verificarEmail,
     verificarSenha,
@@ -18,7 +18,7 @@ rotas.post(
     cadastrarUsuario
 )
 
-rotas.post(
+routes.post(
     '/login',
     verificarEmail,
     verificarSenha,
@@ -27,15 +27,15 @@ rotas.post(
     logarUsuario
 )
 
-rotas.use(validarToken)
+routes.use(validarToken)
 
-rotas.get(
-    '/usuario',
+routes.get(
+    '/user',
     detalharUsuario
 )
 
-rotas.put(
-    '/usuario',
+routes.put(
+    '/user',
     verificarNome,
     verificarEmail,
     verificarSenha,
@@ -43,28 +43,28 @@ rotas.put(
     atualizarUsuario
 )
 
-rotas.get(
+routes.get(
     '/categoria',
     listarCategoria
 )
 
-rotas.get(
+routes.get(
     '/transacao',
     listarTransacao
 )
 
-rotas.get(
+routes.get(
     '/transacao/extrato',
     obterExtrato
 )
 
-rotas.get(
+routes.get(
     '/transacao/:id',
     verificarTransacaoExistente,
     detalharTransacao
 )
 
-rotas.post(
+routes.post(
     '/transacao',
     verificarCamposObrigatorios,
     validarTipoTransacao,
@@ -73,7 +73,7 @@ rotas.post(
     cadastrarTransacao
 )
 
-rotas.put(
+routes.put(
     '/transacao/:id',
     verificarCamposObrigatorios,
     validarTipoTransacao,
@@ -82,10 +82,10 @@ rotas.put(
     atualizarTransacao
 )
 
-rotas.delete(
+routes.delete(
     '/transacao/:id',
     verificarTransacaoExistente,
     excluirTransacao
 )
 
-module.exports = rotas
+module.exports = routes
