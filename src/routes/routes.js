@@ -1,11 +1,11 @@
-const { Router } = require('express')
+const { Router } = require('express');
 
-const { cadastrarUsuario, logarUsuario, detalharUsuario, atualizarUsuario } = require('../controladores/usuarios')
-const { listarCategoria } = require('../controladores/categoria')
-const { listarTransacao, detalharTransacao, cadastrarTransacao, atualizarTransacao, excluirTransacao, obterExtrato } = require('../controladores/transacao')
-const { verificarEmailExistente, verificarEmail, verificarNome, verificarSenha, verificarSenhaValida } = require('../intermediarios/usuarios')
-const validarToken = require('../intermediarios/autenticacao')
-const { verificarCamposObrigatorios, verificarFormatoData, verificarCategoriaExistente, validarTipoTransacao, verificarTransacaoExistente } = require('../intermediarios/transacoes')
+const { cadastrarUsuario, logarUsuario, detalharUsuario, atualizarUsuario } = require('../controllers/usuarios');
+const { listarCategoria } = require('../controllers/categoria');
+const { listarTransacao, detalharTransacao, cadastrarTransacao, atualizarTransacao, excluirTransacao, obterExtrato } = require('../controllers/transacao');
+const { verificarEmailExistente, verificarEmail, verificarNome, verificarSenha, verificarSenhaValida } = require('../intermediarios/usuarios');
+const validarToken = require('../intermediarios/autenticacao');
+const { verificarCamposObrigatorios, verificarFormatoData, verificarCategoriaExistente, validarTipoTransacao, verificarTransacaoExistente } = require('../intermediarios/transacoes');
 
 const rotas = Router()
 
