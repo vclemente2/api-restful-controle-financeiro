@@ -9,7 +9,7 @@ class UserController {
         const encryptedPassword = await bcrypt.hash(password, 10);
 
         const user = await UserRepository.create({ name, email, password: encryptedPassword });
-        console.log(user)
+
         const { password: _, ...newUser } = user[0];
 
         return res.status(201).json(newUser);

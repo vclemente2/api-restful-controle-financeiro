@@ -6,8 +6,9 @@ const tokenValidation = require('../middlewares/authMiddleware');
 const userMiddleware = require('../middlewares/UserMiddleware');
 const validadeRequestbody = require('../middlewares/validateRequestBody');
 const userValidation = require('../schema/userSchema');
+const loginSchema = require('../schema/loginSchema');
 
-const routes = Router()
+const routes = Router();
 
 routes.post(
     '/user',
@@ -18,9 +19,7 @@ routes.post(
 
 routes.post(
     '/login',
-    // verificarEmail,
-    // verificarSenha,
-    // verificarEmailExistente,
+    validadeRequestbody(loginSchema),
     userMiddleware.verifyUserCredentials,
     userLogin
 )
@@ -34,10 +33,8 @@ routes.get(
 
 routes.put(
     '/user',
-    // verificarNome,
-    // verificarEmail,
-    // verificarSenha,
-    // verificarEmailExistente,
+    validadeRequestbody(userValidation),
+    userMiddleware.uniqueEmail,
     userController.update
 )
 
