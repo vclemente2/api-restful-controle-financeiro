@@ -7,6 +7,7 @@ const userMiddleware = require('../middlewares/UserMiddleware');
 const validadeRequestbody = require('../middlewares/validateRequestBody');
 const userValidation = require('../schema/userSchema');
 const loginSchema = require('../schema/loginSchema');
+const categoryController = require('../controllers/CategoryController');
 
 const routes = Router();
 
@@ -38,10 +39,10 @@ routes.put(
     userController.update
 )
 
-// routes.get(
-//     '/categoria',
-//     listarCategoria
-// )
+routes.get(
+    '/categoria',
+    categoryController.findAll
+)
 
 // routes.get(
 //     '/transacao',
