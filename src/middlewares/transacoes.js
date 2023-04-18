@@ -1,4 +1,7 @@
 const pool = require('../conexao/conexao')
+const BaseRepository = require('../repositories/BaseRepository');
+const CategoryRepository = require('../repositories/CategoryRepository');
+const UserRepository = require('../repositories/UserRepository');
 const { buscarTransacoesPeloIdDoUsuario } = require('../utils/utilsTransacao')
 
 const verificarCamposObrigatorios = (req, res, next) => {

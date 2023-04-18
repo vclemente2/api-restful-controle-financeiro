@@ -1,84 +1,36 @@
-const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt');
 
-const senhaToken = require('../senha-token')
-
-const { criptografarSenha } = require('../utils/utilsUsuarios')
+const UserRepository = require('../repositories/UserRepository');
 
 class UserController {
-
     async create(req, res) {
+        const { name, email, password } = req.body;
 
+        const encryptedPassword = await bcrypt.hash(password, 10);
+
+        const user = await UserRepository.create({ name, email, password: encryptedPassword });
+        console.log(user)
+        const { password: _, ...newUser } = user[0];
+
+        return res.status(201).json(newUser);
     }
 
     async findOne(req, res) {
+        const { user } = req;
 
+        return res.status(200).json(user);
     }
 
     async update(req, res) {
+        const { name, email, password } = req.body;
+        const { id } = req.user
 
-    }
+        const encryptedPassword = await bcrypt.hash(password, 10);
 
-    async destroy(req, res) {
+        await UserRepository.update(id, { name, email, password: encryptedPassword });
 
-    }
-
-}
-const cadastrarUsuario = async (req, res) => {
-    const { nome, email, senha } = req.body
-
-    try {
-        const senhaCriptografada = await criptografarSenha(senha);
-
-        const query = `
-        INSERT INTO usuarios (nome, email, senha)
-        VALUES
-        ($1, $2, $3)
-        RETURNING id, nome, email
-        `
-
-        const usuarioCadastrado = await pool.query(query, [nome, email, senhaCriptografada])
-
-        return res.status(201).json(usuarioCadastrado.rows[0])
-    } catch (error) {
-        return res.status(500).json({ mensagem: error.message })
+        return res.sendStatus(204);
     }
 }
 
-
-
-const detalharUsuario = (req, res) => {
-    const { usuario } = req
-
-    return res.status(200).json(usuario)
-}
-
-const atualizarUsuario = async (req, res) => {
-    const { nome, email, senha } = req.body
-
-    try {
-        const senhaCriptografada = await criptografarSenha(senha)
-        const { id } = req.usuario
-
-        const query = `
-        UPDATE usuarios
-        SET
-        nome = $1,
-        email = $2,
-        senha = $3
-        WHERE id = $4
-        `
-
-        await pool.query(query, [nome, email, senhaCriptografada, id])
-
-        return res.sendStatus(204)
-    } catch (error) {
-        return res.status(500).json({ mensagem: error.message })
-    }
-}
-
-module.exports = {
-    cadastrarUsuario,
-    logarUsuario,
-    detalharUsuario,
-    atualizarUsuario
-}
+module.exports = new UserController();
